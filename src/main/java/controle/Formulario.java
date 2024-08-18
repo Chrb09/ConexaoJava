@@ -2,8 +2,7 @@ package controle;
 
 import java.awt.*;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.text.*;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -54,7 +53,7 @@ public class Formulario extends JFrame{
         lblEmail = new JLabel("Email:");
         lblPesquisa = new JLabel("Pesquisar nome:");
         
-        txtCodigo = new JTextField("");
+        txtCodigo = new JTextField("0");
         txtNome = new JTextField("");
         txtEmail = new JTextField("");
         txtPesquisa = new JTextField("");
@@ -101,6 +100,28 @@ public class Formulario extends JFrame{
         sair.setBounds(450,140,125,28);
         pesquisar.setBounds(450, 475, 125, 28);
         
+        primeiro.setToolTipText("ALT + ⬇ para executar a ação");
+        anterior.setToolTipText("ALT + ⬅ para executar a ação");
+        proximo.setToolTipText("ALT + ⮕ para executar a ação");
+        ultimo.setToolTipText("ALT + ⬆ para executar a ação");
+        limpar.setToolTipText("ALT + N para executar a ação");
+        gravar.setToolTipText("ALT + G para executar a ação");
+        alterar.setToolTipText("ALT + A para executar a ação");
+        excluir.setToolTipText("ALT + E para executar a ação");
+        sair.setToolTipText("ALT + BACKSPACE para executar a ação");
+        
+        pesquisar.setToolTipText("ENTER para executar a ação");
+   
+        getRootPane().setDefaultButton(pesquisar);
+        primeiro.setMnemonic(KeyEvent.VK_DOWN);
+        anterior.setMnemonic(KeyEvent.VK_LEFT);
+        proximo.setMnemonic(KeyEvent.VK_RIGHT);
+        ultimo.setMnemonic(KeyEvent.VK_UP);
+        limpar.setMnemonic(KeyEvent.VK_N);
+        gravar.setMnemonic(KeyEvent.VK_G);
+        alterar.setMnemonic(KeyEvent.VK_A);
+        excluir.setMnemonic(KeyEvent.VK_E);
+        sair.setMnemonic(KeyEvent.VK_BACK_SPACE);
         
         
         tela.add(lblCodigo);
@@ -174,7 +195,7 @@ public class Formulario extends JFrame{
         
         limpar.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-            txtCodigo.setText("");
+            txtCodigo.setText("0");
             txtNome.setText("");
             txtData.setText("");
             txtTelefone.setText("");
@@ -184,31 +205,103 @@ public class Formulario extends JFrame{
     });
         gravar.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-
+            String nome = txtNome.getText();
+            String data = txtData.getText();
+            String telefone = txtTelefone.getText();
+            String email = txtEmail.getText();
+            
+            try{
+                String insert_sql="insert into tbclientes (nome,telefone, email, dt_nasc) values ('" + nome + "','" + telefone+ "','" + email + "','" + data + "')";
+                con_cliente.statement.executeUpdate(insert_sql);
+                JOptionPane.showMessageDialog(null, "Gravação realizada com sucesso!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                
+                con_cliente.executaSQL("select * from tbclientes order by cod");
+                preencherTabela();
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "\n Erro na gravação:\n " + erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     });
         
         alterar.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-
+            String nome = txtNome.getText();
+            String data = txtData.getText();
+            String telefone = txtTelefone.getText();
+            String email = txtEmail.getText();
+            String sql;
+            String msg ="";
+            
+            try{
+                if(txtCodigo.getText().equals("")){
+                    sql="insert into tbclientes (nome,telefone, email, dt_nasc) values ('" + nome + "','" + telefone+ "','" + email + "','" + data + "')";
+                    msg="Gravação de um novo registro";
+                }else{
+                    sql="update tbclientes set nome='" + nome + "',telefone='" + telefone + "', email='" + email + "',dt_nasc='" + data + "' where cod = " + txtCodigo.getText();
+                    msg="Alteração de registro";
+                }
+                
+                con_cliente.statement.executeUpdate(sql);
+                JOptionPane.showMessageDialog(null, "Gravação realizada com sucesso!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                
+                con_cliente.executaSQL("select * from tbclientes order by cod");
+                preencherTabela();
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "\n Erro na gravação:\n " + erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     });
         
         excluir.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-
+            String sql="";
+            String codigo = txtCodigo.getText();
+            try{
+                int resposta = JOptionPane.showConfirmDialog(rootPane, "Deseja excluir o registro: \n" +codigo,"Confirmar Exclusão", JOptionPane.YES_NO_OPTION, 3);
+                if(resposta==0){
+                    sql="delete from tbclientes where cod = " + txtCodigo.getText();
+                    int excluir = con_cliente.statement.executeUpdate(sql);
+                    if (excluir==1){
+                        JOptionPane.showMessageDialog(null, "Exclusão realizada com sucesso!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                        con_cliente.executaSQL("select * from tbclientes order by cod");
+                        con_cliente.resultset.first();
+                        preencherTabela();
+                        posicionarRegistro();
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Operação cancelada pelo usuário!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "\n Erro na exclusão:\n " + erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     });
         
         pesquisar.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-
+            try{
+                String pesquisa = "select * from tbclientes where nome like'" + txtPesquisa.getText() + "%'";
+                con_cliente.executaSQL(pesquisa);
+                
+                if(con_cliente.resultset.first()){
+                    preencherTabela();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "\n Não existe dados com este paramêtro!!", "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "\n Os dados digitados não foram localizados:\n " + erro, "Mensagem do Programa", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     });
         
         sair.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
-
+            int opcao;
+            Object[] botoes = {"Sim","Não"};
+            opcao = JOptionPane.showOptionDialog(null,"Deseja mesmo fechar a janela?","Fechar",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,botoes,botoes[0]);
+            if (opcao==JOptionPane.YES_OPTION)
+            System.exit(0); 
         }
     });
         tableCliente.setFocusable(false);
