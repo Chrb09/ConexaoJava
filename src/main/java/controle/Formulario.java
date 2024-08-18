@@ -18,9 +18,9 @@ public class Formulario extends JFrame{
     
     Conexao con_cliente;
     
-    JLabel lblCodigo, lblNome, lblData, lblTelefone, lblEmail;
-    JTextField txtCodigo, txtNome,txtEmail;
-    JButton primeiro, anterior, proximo, ultimo;
+    JLabel lblCodigo, lblNome, lblData, lblTelefone, lblEmail, lblPesquisa;
+    JTextField txtCodigo, txtNome,txtEmail, txtPesquisa;
+    JButton primeiro, anterior, proximo, ultimo, limpar, gravar, alterar, excluir, sair, pesquisar;
     JFormattedTextField txtData, txtTelefone;
     MaskFormatter mData, mTelefone;
     
@@ -49,12 +49,14 @@ public class Formulario extends JFrame{
         lblCodigo = new JLabel("Código:");
         lblNome = new JLabel("Nome:");
         lblData = new JLabel("Data:");
-        lblTelefone = new JLabel("Telefone");
+        lblTelefone = new JLabel("Telefone:");
         lblEmail = new JLabel("Email:");
+        lblPesquisa = new JLabel("Pesquisa por nome do Cliente:");
         
         txtCodigo = new JTextField("");
         txtNome = new JTextField("");
         txtEmail = new JTextField("");
+        txtPesquisa = new JTextField("");
         txtData = new JFormattedTextField(mData);
         txtTelefone = new JFormattedTextField(mTelefone);
         
@@ -62,27 +64,43 @@ public class Formulario extends JFrame{
         anterior = new JButton("Anterior");
         proximo = new JButton("Próximo");
         ultimo = new JButton("Último");
+        limpar = new JButton("Limpar");
+        gravar = new JButton("Gravar");
+        alterar = new JButton("Alterar");
+        excluir = new JButton("Excluir");
+        pesquisar = new JButton("Pesquisar");
+        sair = new JButton("Sair");
                 
         tableCliente = new javax.swing.JTable();
         scrollCliente = new javax.swing.JScrollPane();
         
-        lblCodigo.setBounds(50,20,50,20);
-        lblNome.setBounds(50,50,50,20);
-        lblEmail.setBounds(50,80,50,20);
-        lblData.setBounds(50,110,50,20);
-        lblTelefone.setBounds(50,140,50,20);
-        txtCodigo.setBounds(120,20,50,20);
-        txtNome.setBounds(120,50,150,20);
-        txtEmail.setBounds(120,80,150,20);
-        txtData.setBounds(120,110,70,20);
-        txtTelefone.setBounds(120,140,100,20);
-        tableCliente.setBounds(50, 200, 550, 199);
-        scrollCliente.setBounds(50,200,550,199);
+        lblCodigo.setBounds(75,20,100,20);
+        lblNome.setBounds(75,50,100,20);
+        lblEmail.setBounds(75,80,100,20);
+        lblData.setBounds(75,110,100,20);
+        lblTelefone.setBounds(75,140,100,20);
+        lblPesquisa.setBounds(75,200,200,20);
+        txtCodigo.setBounds(175,20,200,20);
+        txtNome.setBounds(175,50,200,20);
+        txtEmail.setBounds(175,80,200,20);
+        txtData.setBounds(175,110,200,20);
+        txtTelefone.setBounds(175,140,200,20);
+        txtPesquisa.setBounds(275,200,199,20);
+        tableCliente.setBounds(50, 230, 550, 300);
+        scrollCliente.setBounds(50,230,550,299);
         
-        primeiro.setBounds(50, 170, 100, 20);
-        anterior.setBounds(150, 170, 100, 20);
-        proximo.setBounds(250, 170, 100, 20);
-        ultimo.setBounds(350, 170, 100, 20);
+        primeiro.setBounds(75, 170, 100, 20);
+        anterior.setBounds(175, 170, 100, 20);
+        proximo.setBounds(275, 170, 100, 20);
+        ultimo.setBounds(375, 170, 100, 20);
+        limpar.setBounds(425,20,125,20);
+        gravar.setBounds(425,50,125,20);
+        alterar.setBounds(425,80,125,20);
+        excluir.setBounds(425,110,125,20);
+        sair.setBounds(425,140,125,20);
+        pesquisar.setBounds(475, 200, 100, 20);
+        
+        
         
         tela.add(lblCodigo);
         tela.add(lblNome);
@@ -100,6 +118,14 @@ public class Formulario extends JFrame{
         tela.add(anterior);
         tela.add(proximo);
         tela.add(ultimo);
+        tela.add(limpar);
+        tela.add(gravar);
+        tela.add(alterar);
+        tela.add(excluir);
+        tela.add(pesquisar);
+        tela.add(sair);
+        tela.add(lblPesquisa);
+        tela.add(txtPesquisa);
         
         primeiro.addActionListener(new ActionListener(){
         public void actionPerformed(ActionEvent e){
@@ -145,6 +171,46 @@ public class Formulario extends JFrame{
         }
     });
         
+        limpar.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+            txtCodigo.setText("");
+            txtNome.setText("");
+            txtData.setText("");
+            txtTelefone.setText("");
+            txtEmail.setText("");
+            txtCodigo.requestFocus();
+        }
+    });
+        gravar.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+
+        }
+    });
+        
+        alterar.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+
+        }
+    });
+        
+        excluir.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+
+        }
+    });
+        
+        pesquisar.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+
+        }
+    });
+        
+        sair.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+
+        }
+    });
+        
         tableCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         tableCliente.setFont(new java.awt.Font("Arial", 1, 12));
         tableCliente.setModel(new javax.swing.table.DefaultTableModel(
@@ -159,7 +225,7 @@ public class Formulario extends JFrame{
             {null, null, null, null, null},
             {null, null, null, null, null}
         },
-        new String [] {"Código", "Nome", "Data Nascimento", "Telefone", "Email"})
+        new String [] {"Cod", "Nome", "Data Nascimento", "Telefone", "Email"})
         {
         boolean[] canEdit = new boolean []{
         false, false, false, false, false};
@@ -180,11 +246,11 @@ public class Formulario extends JFrame{
     }   
     
     public void preencherTabela() {
-        tableCliente.getColumnModel().getColumn(0).setPreferredWidth(4);
+        tableCliente.getColumnModel().getColumn(0).setPreferredWidth(40);
         tableCliente.getColumnModel().getColumn(1).setPreferredWidth(150);
-        tableCliente.getColumnModel().getColumn(2).setPreferredWidth(11);
-        tableCliente.getColumnModel().getColumn(3).setPreferredWidth(14);
-        tableCliente.getColumnModel().getColumn(4).setPreferredWidth(100);
+        tableCliente.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tableCliente.getColumnModel().getColumn(3).setPreferredWidth(90);
+        tableCliente.getColumnModel().getColumn(4).setPreferredWidth(130);
 
         DefaultTableModel modelo = (DefaultTableModel) tableCliente.getModel();
         modelo.setNumRows(0);
