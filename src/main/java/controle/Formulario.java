@@ -1,6 +1,7 @@
 package controle;
 
 import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.*;
@@ -51,7 +52,7 @@ public class Formulario extends JFrame{
         lblData = new JLabel("Data:");
         lblTelefone = new JLabel("Telefone:");
         lblEmail = new JLabel("Email:");
-        lblPesquisa = new JLabel("Pesquisa por nome do Cliente:");
+        lblPesquisa = new JLabel("Pesquisar nome:");
         
         txtCodigo = new JTextField("");
         txtNome = new JTextField("");
@@ -64,7 +65,7 @@ public class Formulario extends JFrame{
         anterior = new JButton("Anterior");
         proximo = new JButton("Próximo");
         ultimo = new JButton("Último");
-        limpar = new JButton("Limpar");
+        limpar = new JButton("Novo Registro");
         gravar = new JButton("Gravar");
         alterar = new JButton("Alterar");
         excluir = new JButton("Excluir");
@@ -74,31 +75,31 @@ public class Formulario extends JFrame{
         tableCliente = new javax.swing.JTable();
         scrollCliente = new javax.swing.JScrollPane();
         
-        lblCodigo.setBounds(75,20,100,20);
-        lblNome.setBounds(75,50,100,20);
-        lblEmail.setBounds(75,80,100,20);
-        lblData.setBounds(75,110,100,20);
-        lblTelefone.setBounds(75,140,100,20);
-        lblPesquisa.setBounds(75,200,200,20);
-        txtCodigo.setBounds(175,20,200,20);
-        txtNome.setBounds(175,50,200,20);
-        txtEmail.setBounds(175,80,200,20);
-        txtData.setBounds(175,110,200,20);
-        txtTelefone.setBounds(175,140,200,20);
-        txtPesquisa.setBounds(275,200,199,20);
-        tableCliente.setBounds(50, 230, 550, 300);
-        scrollCliente.setBounds(50,230,550,299);
+        lblCodigo.setBounds(75,20,100,25);
+        lblNome.setBounds(75,50,100,25);
+        lblEmail.setBounds(75,80,100,25);
+        lblData.setBounds(75,110,100,25);
+        lblTelefone.setBounds(75,140,100,25);
+        lblPesquisa.setBounds(75,475,200,25);
+        txtCodigo.setBounds(225,20,200,25);
+        txtNome.setBounds(225,50,200,25);
+        txtEmail.setBounds(225,80,200,25);
+        txtData.setBounds(225,110,200,25);
+        txtTelefone.setBounds(225,140,200,25);
+        txtPesquisa.setBounds(225,475,200,25);
+        tableCliente.setBounds(50, 230, 550, 230);
+        scrollCliente.setBounds(50,230,550,230);
         
-        primeiro.setBounds(75, 170, 100, 20);
-        anterior.setBounds(175, 170, 100, 20);
-        proximo.setBounds(275, 170, 100, 20);
-        ultimo.setBounds(375, 170, 100, 20);
-        limpar.setBounds(425,20,125,20);
-        gravar.setBounds(425,50,125,20);
-        alterar.setBounds(425,80,125,20);
-        excluir.setBounds(425,110,125,20);
-        sair.setBounds(425,140,125,20);
-        pesquisar.setBounds(475, 200, 100, 20);
+        primeiro.setBounds(75, 190, 125, 28);
+        anterior.setBounds(200, 190, 125, 28);
+        proximo.setBounds(325, 190, 125, 28);
+        ultimo.setBounds(450, 190, 125, 28);
+        limpar.setBounds(450,20,125,28);
+        gravar.setBounds(450,50,125,28);
+        alterar.setBounds(450,80,125,28);
+        excluir.setBounds(450,110,125,28);
+        sair.setBounds(450,140,125,28);
+        pesquisar.setBounds(450, 475, 125, 28);
         
         
         
@@ -210,9 +211,14 @@ public class Formulario extends JFrame{
 
         }
     });
+        tableCliente.setFocusable(false);
+        tableCliente.setIntercellSpacing(new Dimension(0, 0));
+        tableCliente.setRowHeight(25);
+        tableCliente.setGridColor(new Color(240, 240, 240));
+        tableCliente.setSelectionBackground(new Color(217, 235, 249));
+        tableCliente.getTableHeader().setFont(new Font("", Font.BOLD, 12));
+        tableCliente.setSelectionForeground(Color.BLACK);
         
-        tableCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tableCliente.setFont(new java.awt.Font("Arial", 1, 12));
         tableCliente.setModel(new javax.swing.table.DefaultTableModel(
         new Object [] [] {
             {null, null, null, null, null},
@@ -236,11 +242,12 @@ public class Formulario extends JFrame{
         scrollCliente.setViewportView(tableCliente);
         tableCliente.setAutoCreateRowSorter(true);
         
-        setSize(675, 600);
+        setSize(675, 560);
         setVisible(true);
         setLocationRelativeTo(null);
         
         con_cliente.executaSQL("select * from tbclientes order by cod");
+        
         preencherTabela();
         posicionarRegistro();
     }   
@@ -289,7 +296,10 @@ public class Formulario extends JFrame{
         JOptionPane.showMessageDialog(null,"Não localizou dados: "+erro,"Mensagem do Programa",JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    public static void main(String args[]){
+    public static void main(String args[]) throws Exception{
+        
+        String theme= "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+        UIManager.setLookAndFeel(theme);
         Formulario app = new Formulario();
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
