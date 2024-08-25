@@ -389,11 +389,5 @@ public class Formulario extends JFrame{
         JOptionPane.showMessageDialog(null,"Não localizou dados: "+erro,"Mensagem do Programa",JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    public static void main(String args[]) throws Exception{
-        
-        String theme= "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-        UIManager.setLookAndFeel(theme);
-        Formulario app = new Formulario();
-        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+
 }
